@@ -12,12 +12,57 @@ const DAY = 2;
 // data path    : Z:\advent-of-code\years\2022\02\data.txt
 // problem url  : https://adventofcode.com/2022/day/2
 
+let key = {
+	"X":1,
+	"Y":2,
+	"Z":3,
+	"A":1,
+	"B":2,
+	"C":3
+};
+type keys = keyof typeof key;
+
 async function p2022day2_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	let total = 0;
+	const lines = input.split("\n");
+
+	for (const line of lines) {
+		let round = line.split(" ") as keys[];
+		total = total + scoreForRound(round[0], round[1])
+	}
+	return total;
+}
+
+function scoreForRound(a: keys, b: keys) {
+	let choiceScore = key[b];
+	if(key[b] == key[a]) return choiceScore + 3;
+	if(doesAWin(key[b], key[a])) return choiceScore + 6;
+	else return choiceScore + 0;		
+}
+
+function doesAWin(a: number, b: number) {
+	switch (a) {
+		case 1:
+			return b==3;
+		case 2:
+			return b==1;
+		case 3:
+			return b==2;
+	}
+
 }
 
 async function p2022day2_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	let total = 0;
+	const lines = input.split("\n");
+
+	for (const line of lines) {
+		let round = line.split(" ") as keys[];
+		let offset = key[round[1]] - 2;
+		let choice = (((key[round[0]] - 1) + offset + 3) % 3) + 1;
+		total = total + choice + (offset ? 3 + offset * 3 : 3);
+	}
+	return total;
 }
 
 async function run() {
