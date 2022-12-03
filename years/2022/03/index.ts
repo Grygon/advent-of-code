@@ -12,12 +12,56 @@ const DAY = 3;
 // data path    : Z:\advent-of-code\years\2022\03\data.txt
 // problem url  : https://adventofcode.com/2022/day/3
 
+function getPriority(s: string){
+	let pri = s.charCodeAt(0)-96;
+	if(pri <= 0) pri = pri + 58;
+	return pri
+}
+
 async function p2022day3_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	const lines = input.split("\n");
+	let sum = 0;
+	for (const line of lines) {
+		let done = false;
+		let first = line.substring(0, line.length/2).split("");
+		let second = line.substring(line.length / 2, line.length).split("");
+		for(const char1 of first) {
+			if(done) break;
+			for(const char2 of second) {
+				if(done) break;
+				if(char1.charCodeAt(0) == char2.charCodeAt(0)) {
+					sum += getPriority(char1);
+					done = true;
+				}
+			}
+		}
+	}
+	return sum;
 }
 
 async function p2022day3_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	const lines = input.split("\n");
+	let sum = 0;
+	let groupArr = [];
+	for (const line of lines) {
+		if (groupArr.push(line)<3) continue;
+		let done = false;
+		for(const char1 of groupArr[0]) {
+			if(done) break;
+			for(const char2 of groupArr[1]) {
+				if(done) break;
+				for(const char3 of groupArr[2]) {
+					if(done) break;
+					if(char1.charCodeAt(0) == char2.charCodeAt(0) && char1.charCodeAt(0) == char3.charCodeAt(0)) {
+						sum += getPriority(char1);
+						done = true;
+					}
+				}
+			}
+		}
+		groupArr = [];
+	}
+	return sum;
 }
 
 async function run() {
