@@ -4,6 +4,7 @@ import * as test from "../../../util/test";
 import chalk from "chalk";
 import { log, logSolution, trace } from "../../../util/log";
 import { performance } from "perf_hooks";
+import { min } from '../../../util/util';
 
 const YEAR = 2022;
 const DAY = 4;
@@ -13,11 +14,37 @@ const DAY = 4;
 // problem url  : https://adventofcode.com/2022/day/4
 
 async function p2022day4_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	const lines = input.split("\n");
+	let count = 0;
+	for (const line of lines) {
+		let pairs = line.split(",").map((i) => {return i.split("-").map((c) => parseInt(c))}) as number[][];
+		
+		for (let i = 0; i < 2; i++) {
+			let j = Number(!i);
+			if(pairs[i][0] >= pairs[j][0] && pairs[i][1] <= pairs[j][1]) {
+				count++;
+				break;
+			}
+		}
+	}
+	return count;
 }
 
 async function p2022day4_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	const lines = input.split("\n");
+	let count = 0;
+	for (const line of lines) {
+		let pairs = line.split(",").map((i) => {return i.split("-").map((c) => parseInt(c))}) as number[][];
+		
+		for (let i = 0; i < 2; i++) {
+			let j = Number(!i);
+			if((pairs[i][0] >= pairs[j][0] && pairs[i][0] <= pairs[j][1]) || (pairs[i][1] <= pairs[j][1] && pairs[i][1] >= pairs[j][0])) {
+				count++;
+				break;
+			}
+		}
+	}
+	return count;
 }
 
 async function run() {
