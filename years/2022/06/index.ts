@@ -13,15 +13,33 @@ const DAY = 6;
 // problem url  : https://adventofcode.com/2022/day/6
 
 async function p2022day6_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	let buffer = [];
+	for (let i = 0; i < input.length; i++) {
+		const char = input[i];
+		buffer.push(char);
+		if(buffer.length >= 5) buffer.shift();
+		let s = new Set(buffer);
+		if(s.size == 4) return i + 1;
+	}
 }
 
 async function p2022day6_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	let buffer = [];
+	for (let i = 0; i < input.length; i++) {
+		const char = input[i];
+		buffer.push(char);
+		if(buffer.length >= 15) buffer.shift();
+		let s = new Set(buffer);
+		if(s.size == 14) return i + 1;
+	}
 }
 
 async function run() {
-	const part1tests: TestCase[] = [];
+	const part1tests: TestCase[] = [{
+		input: "bvwbjplbgvbhsrlpgdmjqwftvncz",expected: "5"}
+		,{input: "nppdvjthqldpwncqszvftbrmjlhg",expected: "6"}
+		,{input: "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", expected: "10"}
+		,{input: "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", expected: "11"}];
 	const part2tests: TestCase[] = [];
 
 	// Run tests
