@@ -3,6 +3,7 @@ import * as test from "../../../util/test";
 import chalk from "chalk";
 import { log, logSolution, trace } from "../../../util/log";
 import { performance } from "perf_hooks";
+import { round } from "lodash";
 
 const YEAR = 2023;
 const DAY = 6;
@@ -12,16 +13,42 @@ const DAY = 6;
 // problem url  : https://adventofcode.com/2023/day/6
 
 async function p2023day6_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	let times = [...input.split("\n")[0].matchAll(/\d+/g)].map((i) => +i[0]);
+	let distances = [...input.split("\n")[1].matchAll(/\d+/g)].map((i) => +i[0]);
+	let allSolns: number[] = []
+
+	times.forEach((time, i) => {
+		let z = .5 * (time - Math.sqrt(time**2 - (4 * distances[i]))) + .001;
+		let minTime = Math.floor(z);
+		let maxTime = time - Math.ceil(z);
+		let solns = maxTime - minTime;
+		allSolns.push(solns);
+	});
+
+	return allSolns.reduce((prev, cur) => prev * cur);
 }
 
 async function p2023day6_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	let times = [...input.split("\n")[0].replace(/ /g,"").matchAll(/\d+/g)].map((i) => +i[0]);
+	let distances = [...input.split("\n")[1].replace(/ /g,"").matchAll(/\d+/g)].map((i) => +i[0]);
+	let allSolns: number[] = []
+
+	times.forEach((time, i) => {
+		let z = .5 * (time - Math.sqrt(time**2 - (4 * distances[i]))) + .001;
+		let minTime = Math.floor(z);
+		let maxTime = time - Math.ceil(z);
+		let solns = maxTime - minTime;
+		allSolns.push(solns);
+	});
+
+	return allSolns.reduce((prev, cur) => prev * cur);
 }
 
 async function run() {
-	const part1tests: TestCase[] = [];
-	const part2tests: TestCase[] = [];
+	const part1tests: TestCase[] = [{input: `Time:      7  15   30
+	Distance:  9  40  200`, expected: '288'}];
+	const part2tests: TestCase[] = [{input: `Time:      7  15   30
+	Distance:  9  40  200`, expected: '71503'}];
 
 	// Run tests
 	test.beginTests();
