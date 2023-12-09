@@ -12,16 +12,74 @@ const DAY = 9;
 // problem url  : https://adventofcode.com/2023/day/9
 
 async function p2023day9_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	let lines = input.split("\n");
+	let histories = lines.map((l) => [...l.matchAll(/-*\d+/g)].map((n) => +n));
+	let sum = 0;
+
+	function getDifferences(nums: number[]) {
+		let result = [];
+		for (let i = 0; i < nums.length - 1; i++) {
+			result.push(nums[i + 1] - nums[i])
+		}
+		return result;
+	}
+	
+	histories.forEach(history => {
+		let diffs = [];
+		let cur = history;
+		while(!cur.every((n) => n == 0)) {
+			diffs.push(cur);
+			cur = getDifferences(cur);
+		}
+		diffs.reverse();
+		let addVal = 0;
+		diffs.forEach((dif, i) => {
+			addVal = dif[dif.length - 1] + addVal;
+		});
+		sum += addVal;
+	});
+
+	return sum;
 }
 
 async function p2023day9_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	let lines = input.split("\n");
+	let histories = lines.map((l) => [...l.matchAll(/-*\d+/g)].map((n) => +n));
+	let sum = 0;
+
+	function getDifferences(nums: number[]) {
+		let result = [];
+		for (let i = 0; i < nums.length - 1; i++) {
+			result.push(nums[i + 1] - nums[i])
+		}
+		return result;
+	}
+	
+	histories.forEach(history => {
+		let diffs = [];
+		let cur = history;
+		while(!cur.every((n) => n == 0)) {
+			diffs.push(cur);
+			cur = getDifferences(cur);
+		}
+		diffs.reverse();
+		let addVal = 0;
+		diffs.forEach((dif, i) => {
+			addVal = dif[0] - addVal;
+		});
+		sum += addVal;
+	});
+
+	return sum;
 }
 
 async function run() {
-	const part1tests: TestCase[] = [];
-	const part2tests: TestCase[] = [];
+	const part1tests: TestCase[] = [{input: `0 3 6 9 12 15
+1 3 6 10 15 21
+10 13 16 21 30 45`, expected: '114'}];
+	const part2tests: TestCase[] = [{input: `0 3 6 9 12 15
+	1 3 6 10 15 21
+	10 13 16 21 30 45`, expected: '2'}];
 
 	// Run tests
 	test.beginTests();
