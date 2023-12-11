@@ -11,17 +11,137 @@ const DAY = 11;
 // data path    : C:\Users\Grygon\Documents\advent-of-code\years\2023\11\data.txt
 // problem url  : https://adventofcode.com/2023/day/11
 
+function expandImage(image: string[]) {
+	let newImage = [...image];
+	let inserted = 0;
+	image.forEach((line, i) => {
+		if([...line].every((c) => c==".")) {
+			newImage = [
+				...newImage.slice(0, i + inserted),
+				line,
+				...newImage.slice(i+inserted++)
+			]
+		}
+	})
+
+	inserted = 0;
+
+	for (let i = 0; i < image[0].length; i++) {
+		let insert = true;
+		image.forEach((line) => {
+			if(line[i] != ".") insert = false;
+		})
+		if(insert) {
+			newImage.forEach((line, j) => {
+				newImage[j] = line.slice(0, i + inserted) + 
+					"." + 
+					line.slice(i+inserted)
+			})
+			inserted++
+		}		
+	}
+
+	return newImage
+}
+
 async function p2023day11_part1(input: string, ...params: any[]) {
-	return "Not implemented";
+	let image = input.split('\n');
+	image = expandImage(image);
+	let galaxies: number[][] = []
+
+	image.forEach((line, y) => {
+		[...line].forEach((char, x) => {
+			if(char=="#") galaxies.push([x, y])
+		})
+	})
+
+	let sum = 0;
+
+	galaxies.forEach((gal1, i) => {
+		galaxies.slice(i).forEach((gal2, j) => {
+			sum += Math.abs(gal1[0] - gal2[0])
+			sum += Math.abs(gal1[1] - gal2[1])
+		})
+	})
+
+	return sum;
+}
+
+function superExpandImage(image: string[]) {
+	let expandedVals: {cols: number[], rows: number[]} = {
+		cols: [],
+		rows: []
+	}
+	image.forEach((line, i) => {
+		if([...line].every((c) => c==".")) {
+			expandedVals.rows.push(i)
+		}
+	})
+
+	for (let i = 0; i < image[0].length; i++) {
+		let insert = true;
+		image.forEach((line) => {
+			if(line[i] != ".") insert = false;
+		})
+		if(insert) {
+			expandedVals.cols.push(i)
+		}		
+	}
+
+	return expandedVals
 }
 
 async function p2023day11_part2(input: string, ...params: any[]) {
-	return "Not implemented";
+	let image = input.split('\n');
+	let galaxies: number[][] = []
+	let expandedVals = superExpandImage(image);
+	let expandVal = 1000000;
+
+	image.forEach((line, y) => {
+		[...line].forEach((char, x) => {
+			if(char=="#") galaxies.push([x, y])
+		})
+	})
+
+	let sum = 0;
+
+	galaxies.forEach((gal1, i) => {
+		galaxies.slice(i).forEach((gal2, j) => {
+			sum += Math.abs(gal1[0] - gal2[0])
+			sum += Math.abs(gal1[1] - gal2[1])
+			expandedVals.rows.forEach((row) => {
+				if((gal1[1] < row && gal2[1] > row) || (gal1[1] > row && gal2[1] < row)) sum += expandVal - 1;
+			})
+			expandedVals.cols.forEach((col) => {
+				if((gal1[0] < col && gal2[0] > col) || (gal1[0] > col && gal2[0] < col)) sum += expandVal - 1;
+			})
+		})
+	})
+
+	return sum;
 }
 
 async function run() {
-	const part1tests: TestCase[] = [];
-	const part2tests: TestCase[] = [];
+	const part1tests: TestCase[] = [{input: `...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....`, expected: '374'}];
+	const part2tests: TestCase[] = [{input: `...#......
+.......#..
+#.........
+..........
+......#...
+.#........
+.........#
+..........
+.......#..
+#...#.....`, expected: '8410'}];
 
 	// Run tests
 	test.beginTests();
